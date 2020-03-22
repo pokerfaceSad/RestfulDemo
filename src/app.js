@@ -1,10 +1,10 @@
 const express = require('express')
 const {
-  getAccount,
-  getAllAccounts,
-  createAccount,
-  updateAccount,
-  deleteAccount
+  getTask,
+  getAllTasks,
+  createTask,
+  updateTask,
+  deleteTask
 } = require('./controller')
 
 const app = express()
@@ -15,14 +15,14 @@ const port = 3000
 app.use(express.json())
 app.get('/', (req, res) => res.send('<h1>Hi, Welcome!</h1>'))
 
-app.get("/tasks/:id", getAccount)
-app.get("/tasks", getAllAccounts)
+app.get("/tasks/:id", getTask)
+app.get("/tasks", getAllTasks)
 
-app.post("/tasks", createAccount)
+app.post("/tasks", createTask)
 
-app.put("/tasks", updateAccount)
+app.put("/tasks", updateTask)
 
-app.delete("/tasks/:id", deleteAccount)
+app.delete("/tasks/:id", deleteTask)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 

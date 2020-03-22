@@ -28,7 +28,7 @@ describe("app", () => {
       })
     })
 
-    it("should get specific task when request url patten is '/tasks/:email'", (done) => {
+    it("should get specific task when request url patten is '/tasks/:id'", (done) => {
       request(app).get('/tasks/1').expect(200).expect({
         "id": 1,
         "content": "Restful API homework",
