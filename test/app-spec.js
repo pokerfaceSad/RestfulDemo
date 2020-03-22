@@ -9,9 +9,9 @@ const request = require('supertest');
 
 describe("app", () => {
   describe("get request", () => {
-    it("should get all accounts when request url pattern is '/accounts'", (done) => {
+    it("should get all tasks when request url pattern is '/tasks'", (done) => {
       app.locals.dataFilePath = "./test/fixture.json"
-      request(app).get('/accounts').expect(200).expect([{
+      request(app).get('/tasks').expect(200).expect([{
           "name": "Tom",
           "phoneNumber": 123456,
           "email": "1@1.com"
@@ -27,8 +27,8 @@ describe("app", () => {
       })
     })
 
-    it("should get specific account when request url patten is '/accounts/:email'", (done) => {
-      request(app).get('/accounts/1@2.com').expect(200).expect({
+    it("should get specific account when request url patten is '/tasks/:email'", (done) => {
+      request(app).get('/tasks/1@2.com').expect(200).expect({
         "name": "Jerry",
         "phoneNumber": 123456,
         "email": "1@2.com"
@@ -54,7 +54,7 @@ describe("app", () => {
       ]), "./test/fixture.json")
     })
     it("should create a account when the corresponding email does not exist in the datasource", (done) => {
-      request(app).post('/accounts').send({
+      request(app).post('/tasks').send({
         "name": "Tom",
         "phoneNumber": 123456,
         "email": "1@3.com"
@@ -80,7 +80,7 @@ describe("app", () => {
     })
 
     it("should not create the account when its email has already existed in the datasource", (done) => {
-      request(app).post('/accounts').send({
+      request(app).post('/tasks').send({
         "name": "Tom",
         "phoneNumber": 123456,
         "email": "1@1.com"
