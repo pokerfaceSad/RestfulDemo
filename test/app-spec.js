@@ -11,28 +11,29 @@ describe("app", () => {
   describe("get request", () => {
     it("should get all tasks when request url pattern is '/tasks'", (done) => {
       app.locals.dataFilePath = "./test/fixture.json"
-      request(app).get('/tasks').expect(200).expect([{
-          "name": "Tom",
-          "phoneNumber": 123456,
-          "email": "1@1.com"
+      request(app).get('/tasks').expect(200).expect([
+        {
+            "id": 1,
+            "content": "Restful API homework",
+            "createdTime": "2019-05-15T00:00:00Z"
         },
         {
-          "name": "Jerry",
-          "phoneNumber": 123456,
-          "email": "1@2.com"
+            "id": 2,
+            "content": "English homework",
+            "createdTime": "2020-01-15T00:00:00Z"
         }
-      ]).end((err, res) => {
+    ]).end((err, res) => {
         if (err) throw err;
         done()
       })
     })
 
-    it("should get specific account when request url patten is '/tasks/:email'", (done) => {
-      request(app).get('/tasks/1@2.com').expect(200).expect({
-        "name": "Jerry",
-        "phoneNumber": 123456,
-        "email": "1@2.com"
-      }).end((err, res) => {
+    it("should get specific task when request url patten is '/tasks/:email'", (done) => {
+      request(app).get('/tasks/1').expect(200).expect({
+        "id": 1,
+        "content": "Restful API homework",
+        "createdTime": "2019-05-15T00:00:00Z"
+    }).end((err, res) => {
         if (err) throw err;
         done()
       })
@@ -41,50 +42,52 @@ describe("app", () => {
 
   describe("post request", () => {
     afterEach(async function () {
-      await asyncWriteFile(JSON.stringify([{
-          "name": "Tom",
-          "phoneNumber": 123456,
-          "email": "1@1.com"
+      await asyncWriteFile(JSON.stringify([
+        {
+            "id": 1,
+            "content": "Restful API homework",
+            "createdTime": "2019-05-15T00:00:00Z"
         },
         {
-          "name": "Jerry",
-          "phoneNumber": 123456,
-          "email": "1@2.com"
+            "id": 2,
+            "content": "English homework",
+            "createdTime": "2020-01-15T00:00:00Z"
         }
-      ]), "./test/fixture.json")
+    ]), "./test/fixture.json")
     })
-    it("should create a account when the corresponding email does not exist in the datasource", (done) => {
-      request(app).post('/tasks').send({
-        "name": "Tom",
-        "phoneNumber": 123456,
-        "email": "1@3.com"
-      }).expect(201).expect([{
-          name: 'Tom',
-          phoneNumber: 123456,
-          email: '1@1.com'
-        },
-        {
-          name: 'Jerry',
-          phoneNumber: 123456,
-          email: '1@2.com'
-        },
-        {
-          name: 'Tom',
-          phoneNumber: 123456,
-          email: '1@3.com'
-        }
+    it("should create a task when the corresponding id does not exist in the datasource", (done) => {
+      request(app).post('/tasks').send(
+    {
+        "id": 3,
+        "content": "Computer Science homework",
+        "createdTime": "2020-01-16T00:00:00Z"
+    }).expect(201).expect([{
+        "id": 1,
+        "content": "Restful API homework",
+        "createdTime": "2019-05-15T00:00:00Z"
+    },
+    {
+        "id": 2,
+        "content": "English homework",
+        "createdTime": "2020-01-15T00:00:00Z"
+    },
+    {
+        "id": 3,
+        "content": "Computer Science homework",
+        "createdTime": "2020-01-16T00:00:00Z"
+    }
       ]).end((err, res) => {
         if (err) throw err;
         done()
       })
     })
 
-    it("should not create the account when its email has already existed in the datasource", (done) => {
+    it("should not create the task when its id has already existed in the datasource", (done) => {
       request(app).post('/tasks').send({
-        "name": "Tom",
-        "phoneNumber": 123456,
-        "email": "1@1.com"
-      }).expect(400).end((err, res) => {
+        "id": 1,
+        "content": "Restful API homework",
+        "createdTime": "2019-05-15T00:00:00Z"
+    }).expect(400).end((err, res) => {
         if (err) throw err;
         done()
       })
